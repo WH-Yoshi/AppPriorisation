@@ -4,9 +4,17 @@ import {Outlet} from "react-router";
 function Root() {
     const [data, setData] = useState<string | null>(null);
 
+
     const handleButtonClick = async () => {
         try {
-            const response = await fetch("https://apppriorisation-api-production.up.railway.app/test-db");
+            const response = await fetch(
+                "https://apppriorisation-api-production.up.railway.app/test-db",
+                {
+                    headers: {
+                        "x-api-key" : "5I2OVG392KIAOMQ2WDU9SXBPA32096"
+                    }
+                }
+            );
             if (!response.ok) {
                 throw new Error("Erreur lors de la récupération des données");
             }
