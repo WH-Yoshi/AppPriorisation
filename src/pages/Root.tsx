@@ -6,7 +6,7 @@ function Root() {
 
     const handleButtonClick = async () => {
         try {
-            const response = await fetch("https://api.example.com/data");
+            const response = await fetch("https://apppriorisation-api-production.up.railway.app/test-db");
             if (!response.ok) {
                 throw new Error("Erreur lors de la récupération des données");
             }
