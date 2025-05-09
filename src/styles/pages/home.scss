@@ -1,0 +1,39 @@
+@mixin home-desktop {
+  #home {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .pub {
+      display: flex;
+      height: 100%;
+
+      .left {
+        width: 50%;
+        display: flex;
+        align-items: center;
+
+        .text-bubble {
+          margin: 0 15%;
+          height: fit-content;
+          border-radius: 12px;
+          border: 0.2rem solid white;
+          padding: 1rem 1rem;
+
+          p {
+            font-size: 1.4rem;
+          }
+        }
+      }
+
+      .right {
+        width: 50%;
+        display: flex;
+      }
+    }
+  }
+}
+
+@mixin home-phone {
+
+}

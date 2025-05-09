@@ -1,5 +1,4 @@
 import Header from "./Header.tsx";
-import Footer from "./Footer.tsx";
 import {Outlet} from "react-router";
 
 function Root() {
@@ -8,7 +7,6 @@ function Root() {
         <>
             <Header />
             <Outlet />
-            <Footer />
         </>
     )
 }
