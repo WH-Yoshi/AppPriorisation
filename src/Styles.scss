@@ -1,10 +1,9 @@
 @use "./styles/index" as *;
-@use "./styles/pages/Root" as Root;
-@use "./styles/pages/home" as Home;
 
 @media screen and (min-width: 1601px) {
-  @include Root.header-desktop;
-  @include Home.home-desktop;
+  @include header-desktop;
+  @include home-desktop;
+  @include login-desktop;
 }
 
 @media screen and (min-width: 1024px) and (max-width: 1600px) {

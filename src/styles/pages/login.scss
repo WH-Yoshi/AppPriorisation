@@ -1,0 +1,87 @@
+@mixin login-desktop {
+  #login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+
+    .title {
+      height: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+    }
+
+    .connexion {
+      width: fit-content;
+      height: fit-content;
+      border-radius: 12px;
+      border: 0.2rem solid white;
+      padding: 3rem 3rem;
+
+      h2 {
+        text-align: center;
+      }
+      a {
+        text-decoration: underline;
+        font-size: 0.8rem;
+        transition: 0.2s;
+
+        &:hover {
+          cursor: pointer;
+          color: lightgray;
+        }
+      }
+
+      .form {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        form {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding-top: 3rem;
+          gap: 2rem;
+
+          section {
+            width: 400px;
+            label {
+              width: 100%;
+            }
+
+            input {
+              width: 100%;
+              max-width: 400px;
+              padding: 1rem;
+              border-radius: 12px;
+              border: none;
+              background-color: white;
+              font-size: 1.5rem;
+            }
+          }
+
+          button {
+            width: 100%;
+            max-width: fit-content;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            border: none;
+            background-color: black;
+            color: white;
+            font-size: 1.5rem;
+            transition: 0.2s;
+
+            &:hover {
+              cursor: pointer;
+              background-color: gray;
+            }
+          }
+        }
+      }
+    }
+  }
+}

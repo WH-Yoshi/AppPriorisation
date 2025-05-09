@@ -1,8 +1,13 @@
+import {useNavigate} from "react-router";
+
 function Home() {
+    const navigate = useNavigate();
 
     return (
         <section id="home">
-            <h1>Priorisez vos rénovations, maximisez vos économies.</h1>
+            <article className="title">
+                <h1>Priorisez vos rénovations, maximisez vos économies.</h1>
+            </article>
             <section className="pub">
                 <section className="left">
                     <article className="text-bubble">
@@ -18,7 +23,7 @@ function Home() {
                     </article>
                 </section>
                 <section className="right">
-                    <article className="top">
+                    <article className="text-bubble">
                         <p>
                             Pour tirer le meilleur parti de notre solution, voici ce dont vous aurez besoin :
                             <br/><br/>
@@ -30,10 +35,10 @@ function Home() {
                             <br/>
                             - Budget estimatif : un montant à investir pour orienter les choix de priorisation.- Localisation du bien : certaines primes dépendent de la région et de la commune.
                             <br/><br/>
-                            💡 Saviez-vous que 50 % des Belges estiment que le soutien financier devrait venir des pouvoirs publics ?Notre outil vous permet d’identifier ces subventions rapidement et de les intégrer dans votre plan de rénovation priorisé.
+                            💡 Saviez-vous que 50 % des Belges estiment que le soutien financier devrait venir des pouvoirs publics ?<br/>Notre outil vous permet d’identifier ces subventions rapidement et de les intégrer dans votre plan de rénovation priorisé.
                         </p>
                     </article>
-                    <button type="button">Prioriser</button>
+                    <button id="start" type="button" onClick={() => navigate("login")}>Prioriser</button>
                 </section>
             </section>
         </section>
