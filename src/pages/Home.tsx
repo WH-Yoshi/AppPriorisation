@@ -38,7 +38,7 @@ function Home() {
                             💡 Saviez-vous que 50 % des Belges estiment que le soutien financier devrait venir des pouvoirs publics ?<br/>Notre outil vous permet d’identifier ces subventions rapidement et de les intégrer dans votre plan de rénovation priorisé.
                         </p>
                     </article>
-                    <button id="start" type="button" onClick={() => navigate("login")}>Prioriser</button>
+                    <button id="start" type="button" onClick={() => navigate("/login")}>Prioriser</button>
                 </section>
             </section>
         </section>

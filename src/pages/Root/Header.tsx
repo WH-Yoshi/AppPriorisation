@@ -4,6 +4,8 @@ function Header() {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const hiddenPaths = ["/login", "/register"];
+
     return (
         <section id="header">
             <section>
@@ -11,8 +13,8 @@ function Header() {
                     <h1>Priorisation rénovation</h1>
                 </article>
                 <article className="right">
-                    {location.pathname !== "/login" && (
-                    <button id="login" type="button" onClick={() => navigate("login")}>Login</button>
+                    {!hiddenPaths.includes(location.pathname) && (
+                        <button id="login" type="button" onClick={() => navigate("/login")}>Login</button>
                     )}
                 </article>
             </section>

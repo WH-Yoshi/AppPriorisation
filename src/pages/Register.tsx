@@ -1,17 +1,17 @@
 import {useNavigate} from "react-router";
 
-function Login() {
+function Register() {
     const navigate = useNavigate();
 
     return (
         <>
             <section id="login-register">
                 <article className="title">
-                    <h1>Connexion</h1>
+                    <h1>Enregistrement</h1>
                 </article>
                 <article className="connexion">
-                    <h2>Connectez-vous afin de suivre vos travaux</h2>
-                    <a onClick={(e) => { e.preventDefault(); navigate("/register"); }}>Pas encore de compte ?</a>
+                    <h2>Créer un compte afin de suivre vos travaux</h2>
+                    <a onClick={(e) => { e.preventDefault(); navigate("/login"); }}>J'ai déjà un compte.</a>
                     <article className="form">
                         <form>
                             <section>
@@ -22,7 +22,7 @@ function Login() {
                                 <label htmlFor="password">Mot de passe</label>
                                 <input type="password" id="password" name="password" required />
                             </section>
-                            <button type="submit">Se connecter</button>
+                            <button type="submit">Continuer</button>
                         </form>
                     </article>
                 </article>
@@ -31,4 +31,4 @@ function Login() {
     )
 }
 
-export default Login;
+export default Register;
