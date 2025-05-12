@@ -4,7 +4,7 @@ function Header() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const hiddenPaths = ["/login", "/register"];
+    const hiddenPaths = ["/login", "/register", "/creation-profil"];
 
     return (
         <section id="header">

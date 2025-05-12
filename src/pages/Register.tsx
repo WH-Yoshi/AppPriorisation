@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router";
 
-function Register() {
+export default function Register() {
     const navigate = useNavigate();
 
     return (
@@ -30,5 +30,3 @@ function Register() {
         </>
     )
 }
-
-export default Register;

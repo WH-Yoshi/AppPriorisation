@@ -1,0 +1,73 @@
+@mixin creation-profil {
+  #creation-profil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+
+    .title {
+      height: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+    }
+
+    .questions {
+      width: 60%;
+      border-radius: 12px;
+      border: 0.2rem solid white;
+      padding: 4%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .title-question {
+        width: 100%;
+      }
+
+      form {
+        width: 100%;
+        padding: 4% 0 0 10%;
+
+        .MuiRadioGroup-root {
+          gap: 1rem;
+
+          .MuiFormControlLabel-label {
+            font-size: 1.3rem;
+            padding-left: 1rem;
+          }
+        }
+
+        .bottom-button {
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+
+          button {
+            width: 100%;
+            max-width: fit-content;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            border: none;
+            background-color: black;
+            color: white;
+            font-size: 1.5rem;
+            transition: 0.2s;
+
+            &:hover {
+              cursor: pointer;
+              background-color: gray;
+            }
+
+            &:disabled {
+              cursor: not-allowed;
+            }
+          }
+        }
+
+      }
+    }
+  }
+}

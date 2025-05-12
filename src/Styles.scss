@@ -4,6 +4,7 @@
   @include header-desktop;
   @include home-desktop;
   @include login-desktop;
+  @include creation-profil;
 }
 
 @media screen and (min-width: 1024px) and (max-width: 1600px) {
