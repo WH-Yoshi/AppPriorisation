@@ -23,7 +23,7 @@ export default function CreationProfil() {
         setLoading(true);
         console.log(selectedOption);
         try {
-            await axios.post("https://apppriorisation-api-production.up.railway.app/creation-profil", {
+            await axios.post("https://apppriorisation-api-production.up.railway.app/profil-utilisateur", {
                 objectif_principal: selectedOption,
             });
             alert("Données envoyées avec succès !");
