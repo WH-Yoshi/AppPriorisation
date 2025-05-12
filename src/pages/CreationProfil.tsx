@@ -22,7 +22,7 @@ export default function CreationProfil() {
         setLoading(true);
         console.log(selectedOption);
         try {
-            const response = await fetch("https://api.example.com/submit", {
+            const response = await fetch("https://apppriorisation-api-production.up.railway.app/profil-utilisateur", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
