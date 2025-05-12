@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import {RadioGroup, FormControlLabel, Radio} from "@mui/material";
 import * as React from "react";
 
@@ -23,9 +22,16 @@ export default function CreationProfil() {
         setLoading(true);
         console.log(selectedOption);
         try {
-            await axios.post("https://apppriorisation-api-production.up.railway.app/profil-utilisateur", {
-                objectif_principal: selectedOption,
+            const response = await fetch("https://api.example.com/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ objectif_principal: selectedOption }),
             });
+            if (!response.ok) {
+                throw new Error("Erreur lors de l'envoi des données");
+            }
             alert("Données envoyées avec succès !");
         } catch (error) {
             console.error("Erreur lors de l'envoi :", error);
