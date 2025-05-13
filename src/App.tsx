@@ -6,6 +6,7 @@ import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import CreationProfil from "./pages/CreationProfil.tsx";
 import Test from "./pages/Test.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
 
 function App() {
     const router = createBrowserRouter([
@@ -17,6 +18,7 @@ function App() {
                 { path: "home", element: <Home /> },
                 { path: "login", element: <Login /> },
                 { path: "register", element: <Register /> },
+                { path: "dashboard", element: <Dashboard /> },
                 { path: "creation-profil", element: <CreationProfil /> },
 
                 { path: "test", element: <Test /> },

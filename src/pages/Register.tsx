@@ -1,7 +1,48 @@
 import {useNavigate} from "react-router";
+import {useState} from "react";
 
 export default function Register() {
     const navigate = useNavigate();
+    const [nom, setNom] = useState("");
+    const [prenom, setPrenom] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+    const handleRegister = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (password !== confirmPassword) {
+            alert("Les mots de passe ne correspondent pas.");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:8000/api/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email: email, password: password, nom: nom, prenom: prenom }),
+            });
+
+            if (response.ok) {
+                alert("Compte créé avec succès !");
+                navigate("/dashboard");
+            } else {
+                if (response.status === 409) {
+                    alert("Cet email est déjà utilisé. Connectez-vous maintenant.");
+                    navigate("/login");
+                }
+                const data = await response.json();
+                console.log(data)
+                alert("Erreur lors de l'inscription");
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'inscription", error);
+            alert("Une erreur est survenue. Veuillez réessayer.");
+        }
+    };
 
     return (
         <>
@@ -13,14 +54,61 @@ export default function Register() {
                     <h2>Créer un compte afin de suivre vos travaux</h2>
                     <a onClick={(e) => { e.preventDefault(); navigate("/login"); }}>J'ai déjà un compte.</a>
                     <article className="form">
-                        <form>
+                        <form onSubmit={handleRegister}>
                             <section>
-                                <label htmlFor="email">Email</label>
-                                <input type="text" id="email" name="email" required />
+                                <input
+                                    type="text"
+                                    id="nom"
+                                    name="nom"
+                                    value={nom}
+                                    placeholder="Nom"
+                                    onChange={(e) => setNom(e.target.value)}
+                                    required
+                                />
                             </section>
                             <section>
-                                <label htmlFor="password">Mot de passe</label>
-                                <input type="password" id="password" name="password" required />
+                                <input
+                                    type="text"
+                                    id="prenom"
+                                    name="prenom"
+                                    value={prenom}
+                                    placeholder="Prénom"
+                                    onChange={(e) => setPrenom(e.target.value)}
+                                    required
+                                />
+                            </section>
+                            <section>
+                                <input
+                                    type="text"
+                                    id="email"
+                                    name="email"
+                                    value={email}
+                                    placeholder="Email"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </section>
+                            <section>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    value={password}
+                                    placeholder="Mot de passe"
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </section>
+                            <section>
+                                <input
+                                    type="password"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    value={confirmPassword}
+                                    placeholder="Confirmer le mot de passe"
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    required
+                                />
                             </section>
                             <button type="submit">Continuer</button>
                         </form>

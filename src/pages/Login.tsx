@@ -1,7 +1,36 @@
 import {useNavigate} from "react-router";
+import {useState} from "react";
 
-function Login() {
+export default function Login() {
     const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const response = await fetch("http://localhost:8080/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email: email, password: password }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Login failed");
+            }
+
+            const data = await response.json();
+            sessionStorage.setItem("token", data.access_token);
+
+            navigate("/dashboard");
+        } catch (error) {
+            console.error("Login failed", error);
+            alert("Login failed. Please check your credentials.");
+        }
+    };
+
 
     return (
         <>
@@ -13,14 +42,24 @@ function Login() {
                     <h2>Connectez-vous afin de suivre vos travaux</h2>
                     <a onClick={(e) => { e.preventDefault(); navigate("/register"); }}>Pas encore de compte ?</a>
                     <article className="form">
-                        <form>
+                        <form onSubmit={handleLogin}>
                             <section>
-                                <label htmlFor="email">Email</label>
-                                <input type="text" id="email" name="email" required />
+                                <input
+                                    type="text"
+                                    id="email"
+                                    name="email"
+                                    placeholder="Email"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required />
                             </section>
                             <section>
-                                <label htmlFor="password">Mot de passe</label>
-                                <input type="password" id="password" name="password" required />
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Mot de passe"
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required />
                             </section>
                             <button type="submit">Se connecter</button>
                         </form>
@@ -30,5 +69,3 @@ function Login() {
         </>
     )
 }
-
-export default Login;

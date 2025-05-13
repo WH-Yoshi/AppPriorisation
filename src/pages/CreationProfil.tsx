@@ -1,8 +1,10 @@
 import { useState } from "react";
 import {RadioGroup, FormControlLabel, Radio} from "@mui/material";
 import * as React from "react";
+import {useNavigate} from "react-router";
 
 export default function CreationProfil() {
+    const navigate = useNavigate()
     const [selectedOption, setSelectedOption] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -20,9 +22,8 @@ export default function CreationProfil() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
-        console.log(selectedOption);
         try {
-            const response = await fetch("https://apppriorisation-api-production.up.railway.app/profil-utilisateur", {
+            const response = await fetch("http://localhost:8000/profil-utilisateur", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -33,6 +34,7 @@ export default function CreationProfil() {
                 throw new Error("Erreur lors de l'envoi des données");
             }
             alert("Données envoyées avec succès !");
+            navigate("/creation-profil2");
         } catch (error) {
             console.error("Erreur lors de l'envoi :", error);
             alert("Erreur lors de l'envoi des données.");
