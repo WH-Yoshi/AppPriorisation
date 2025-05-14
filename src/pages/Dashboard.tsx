@@ -1,109 +1,141 @@
-import { SetStateAction, useState} from "react";
-import {
-    Button,
-    Card,
-    CardContent,
-    Typography,
-    Grid,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    TextField,
-    DialogActions
-} from "@mui/material";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import {Dialog, DialogTitle, DialogContent, DialogActions, Button, Modal, Box} from "@mui/material";
+import NewProject from "./NewProject.tsx";
+import closeIcon from "/assets/close.svg";
+import fetchWithAuth from "./components/FetchUrlAuth.tsx";
+
+type Project = {
+    id: number;
+    name: string;
+    description: string;
+}
 
 export default function Dashboard() {
-    const [projects, setProjects] = useState([
-        {id: 1, name: "Projet Isolation", description: "Isolation thermique de la maison."},
-        {id: 2, name: "Projet Solaire", description: "Installation de panneaux solaires."},
-    ]);
-    const [selectedProject, setSelectedProject] = useState(null);
-    const [openDialog, setOpenDialog] = useState(false);
-    const [newProject, setNewProject] = useState({name: "", description: ""});
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [open, setOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState<number | null>(null);
+    const navigate = useNavigate();
+    const [NewOpen, setNewOpen] = useState(false);
 
-    const handleProjectClick = (project: SetStateAction<null>) => {
-    setSelectedProject(project);
-  };
+    const handleOpen = () => setNewOpen(true);
+    const handleClose = () => {
+        if (window.confirm("Êtes-vous sûr de vouloir annuler ?")) {
+            setNewOpen(false);
+        }
+    };
 
-  const handleDialogOpen = () => {
-    setOpenDialog(true);
-  };
+    const fetchProjects = async () => {
+        try {
+            const response = await fetchWithAuth("http://localhost:8000/api/projects/retrieve", {
+                method: "GET",
+            });
+            if (!response.ok) {
+                console.log(response);
+            }
+            const data = await response.json();
+            const formattedData: Project[] = data.map((item: { id: number; name: string; description: string; }) => ({
+                id: item.id,
+                name: item.name,
+                description: item.description,
+            }));
+            setProjects(formattedData);
+        } catch (error) {
+            console.error("Erreur :", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-    setNewProject({ name: "", description: "" });
-  };
+    useEffect(() => {
+        fetchProjects();
+    }, []);
 
-  const handleCreateProject = () => {
-    setProjects([...projects, { id: projects.length + 1, ...newProject }]);
-    handleDialogClose();
-  };
+    function handleModification(id: number) {
+        navigate(`/project/${id}`);
+    }
 
-  return (
-    <section id="dashboard">
-      <Typography variant="h4" gutterBottom>
-        Dashboard Rénovateur
-      </Typography>
-      <Button variant="contained" color="primary" onClick={handleDialogOpen}>
-        Créer un nouveau projet
-      </Button>
-      <Grid container spacing={2} style={{ marginTop: "20px" }}>
-        {projects.map((project) => (
-          <Grid item xs={12} sm={6} md={4} key={project.id}>
-            <Card onClick={() => handleProjectClick(project)} style={{ cursor: "pointer" }}>
-              <CardContent>
-                <Typography variant="h6">{project.name}</Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {project.description}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+    const confirmDelete = (id: number) => {
+        setSelectedId(id);
+        setNewOpen(true);
+    };
 
-      {selectedProject && (
-        <Dialog open={Boolean(selectedProject)} onClose={() => setSelectedProject(null)}>
-          <DialogTitle>Détails du projet</DialogTitle>
-          <DialogContent>
-            <Typography variant="h6">{selectedProject.name}</Typography>
-            <Typography variant="body1">{selectedProject.description}</Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setSelectedProject(null)} color="primary">
-              Fermer
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
+    const performDelete = async () => {
+        try {
+            await fetchWithAuth(`http://localhost:8000/api/projects/${selectedId}`, { method: "DELETE" });
+            alert("Projet supprimé avec succès !");
+            setNewOpen(false);
+        } catch (error) {
+            console.error("Erreur lors de la suppression :", error);
+        }
+    };
 
-      <Dialog open={openDialog} onClose={handleDialogClose}>
-        <DialogTitle>Créer un nouveau projet</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Nom du projet"
-            fullWidth
-            margin="normal"
-            value={newProject.name}
-            onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
-          />
-          <TextField
-            label="Description"
-            fullWidth
-            margin="normal"
-            value={newProject.description}
-            onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose} color="secondary">
-            Annuler
-          </Button>
-          <Button onClick={handleCreateProject} color="primary">
-            Créer
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </section>
-  );
+    return (
+        <>
+            <section id="dashboard">
+                <article className="title">
+                    <h1>Dashboard Rénovateur</h1>
+                </article>
+                <section className="content">
+                    <>
+                        <article className="top">
+                            <h1>Vos logements</h1>
+                            <button type="button" className="new-project" onClick={handleOpen}>
+                                Ajoutez un logement
+                            </button>
+                        </article>
+                        <hr />
+                        <section className="projects">
+                            {loading ? (
+                                <p>Chargement des logement...</p>
+                            ) : projects.length === 0 ? (
+                                <p>Aucun logement pour le moment.</p>
+                            ) : (
+                                projects.map((project) => (
+                                    <article key={project.id}>
+                                        <h3>{project.name}</h3>
+                                        <p>{project.description}</p>
+                                        <article>
+                                            <button onClick={() => handleModification(project.id)}>Modifier</button>
+                                            <button onClick={() => confirmDelete(project.id)}>Supprimer</button>
+                                        </article>
+                                    </article>
+                                ))
+                            )}
+                        </section>
+                    </>
+                </section>
+
+                <Dialog open={open} onClose={() => setOpen(false)}>
+                    <DialogTitle>Confirmer la suppression</DialogTitle>
+                    <DialogContent>
+                        Êtes-vous sûr de vouloir supprimer ce logement ?
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setOpen(false)}>Annuler</Button>
+                        <Button onClick={performDelete} color="error">Supprimer</Button>
+                    </DialogActions>
+                </Dialog>
+
+                <Modal open={NewOpen} onClose={handleClose}>
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            bgcolor: "background.paper",
+                            borderRadius: 3,
+                            boxShadow: 24,
+                            p: 4,
+                        }}
+                    >
+                        <div className="close-icon"><img alt="close" onClick={handleClose} src={closeIcon}/></div>
+                        <NewProject />
+                    </Box>
+                </Modal>
+            </section>
+        </>
+    );
 }

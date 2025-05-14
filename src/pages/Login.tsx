@@ -9,7 +9,7 @@ export default function Login() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:8080/api/auth/login", {
+            const response = await fetch("http://localhost:8000/api/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -23,7 +23,7 @@ export default function Login() {
 
             const data = await response.json();
             sessionStorage.setItem("token", data.access_token);
-
+            alert("Login successful");
             navigate("/dashboard");
         } catch (error) {
             console.error("Login failed", error);
