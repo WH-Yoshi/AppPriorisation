@@ -4,7 +4,6 @@ import "./Styles.scss";
 import Home from "./pages/Home.tsx";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
-import CreationProfil from "./pages/CreationProfil.tsx";
 import Test from "./pages/Test.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import ProjectDetails from "./pages/ProjectDetails.tsx";
@@ -25,7 +24,6 @@ function App() {
                 { path: "dashboard", element: <ConnectedPrivateRoute><Dashboard /></ConnectedPrivateRoute> },
                 { path: "new-project", element: <ConnectedPrivateRoute><NewProject /></ConnectedPrivateRoute> },
                 { path: "/project/:id", element: <ConnectedPrivateRoute><ProjectDetails /></ConnectedPrivateRoute> },
-                { path: "creation-profil", element: <CreationProfil /> },
 
                 { path: "test", element: <Test /> },
             ],

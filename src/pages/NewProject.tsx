@@ -1,12 +1,16 @@
-import { useState } from "react";
-import * as React from "react";
+import {useState} from "react";
 import CreationProfil from "./CreationProfil.tsx";
+import QuestionsLogement, {FormData1} from "./QuestionsLogement.tsx";
+import QuestionsBudget, {FormData2} from "./QuestionsBudget.tsx";
+import fetchWithAuth from "./components/FetchUrlAuth.tsx";
 
 export default function NewProject() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
-    const [selectedOption1, setSelectedOption1] = useState("");
+    const [profilData, setProfilData] = useState<string>("");
+    const [logementData, setLogementData] = useState<FormData1>();
+    const [budgetData, setBudgetData] = useState<FormData2>();
 
     const handleNext = () => {
         if (currentPage < 2) setCurrentPage(currentPage + 1);
@@ -16,8 +20,41 @@ export default function NewProject() {
         if (currentPage > 0) setCurrentPage(currentPage - 1);
     };
 
-    const handleOptionChange = (option: string) => {
-        setSelectedOption1(option);
+    const handleSubmit = async () => {
+        console.log(name, description, profilData, logementData, budgetData);
+        if (!name || !description || !profilData || !logementData || !budgetData) {
+            alert("Veuillez remplir tous les champs.");
+            return;
+        }
+        if (!window.confirm("Êtes-vous sûr de vouloir soumettre le projet ?")) {
+            return;
+        }
+        const payload = {
+            name: name,
+            description: description,
+            profilData: profilData,
+            logementData,
+            budgetData,
+        };
+
+       try {
+           const response = await fetchWithAuth("http://localhost:8000/api/projects/create", {
+               method: "POST",
+               headers: {
+                   "Content-Type": "application/json",
+               },
+               body: JSON.stringify(payload),
+           });
+
+           if (!response.ok) {
+               throw new Error(`Erreur HTTP : ${response.status}`);
+           }
+
+           const data = await response.json();
+           console.log("Données envoyées avec succès :", data);
+       } catch (error) {
+           console.error("Erreur lors de l'envoi des données :", error);
+       }
     };
 
     return (
@@ -50,24 +87,24 @@ export default function NewProject() {
                             }}
                         >
                             <div className="page">
-                                <CreationProfil onOptionChange={handleOptionChange} />
+                                <CreationProfil onOptionChange={setProfilData} />
                             </div>
                             <div className="page">
-                                <h2>Page 2</h2>
-                                <p>Informations pour la deuxième page.</p>
+                                <QuestionsLogement onChange={setLogementData} />
                             </div>
                             <div className="page">
-                                <h2>Page 3</h2>
-                                <p>Informations pour la troisième page.</p>
+                                <QuestionsBudget onChange={setBudgetData} />
                             </div>
                         </div>
                         <div className="carousel-controls">
                             <button onClick={handlePrevious} disabled={currentPage === 0}>
                                 Précédent
                             </button>
-                            <button onClick={handleNext} disabled={currentPage === 2}>
-                                Suivant
-                            </button>
+                            {currentPage === 2 ? (
+                                <button onClick={handleSubmit}>Envoyer</button>
+                            ) : (
+                                <button onClick={handleNext}>Suivant</button>
+                            )}
                         </div>
                     </section>
                 </section>
