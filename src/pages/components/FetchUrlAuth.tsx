@@ -32,9 +32,12 @@ export default async function fetchWithAuth(url: string, options: FetchOptions =
         } else if (refreshResponse.status === 401) {
             sessionStorage.removeItem("token");
             throw new Error("Session expirée. Veuillez vous reconnecter.");
-        } else {
+        } else if (refreshResponse.status === 404) {
+            sessionStorage.removeItem("token");
             throw new Error("Erreur lors du rafraîchissement du token.");
         }
+    } else if (response.status === 404) {
+        sessionStorage.removeItem("token");
     }
 
     return response;
