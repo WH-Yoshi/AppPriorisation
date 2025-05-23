@@ -1,0 +1,46 @@
+@mixin project-details {
+  .travaux-container {
+    padding: 20px;
+  }
+
+  .categorie {
+    margin-bottom: 30px;
+  }
+
+  .categorie h3 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  .travaux-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .travail-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .travail-card h4 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+  }
+
+  .details p {
+    margin: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    color: black;
+  }
+
+  .details span {
+    font-weight: bold;
+    color: #2980b9;
+  }
+}

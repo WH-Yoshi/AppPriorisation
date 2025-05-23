@@ -8,6 +8,7 @@
   @include creation-profil-desktop;
   @include dashboard-desktop;
   @include new-project-desktop;
+  @include project-details;
 }
 
 @media screen and (min-width: 1024px) and (max-width: 1600px) {

@@ -9,6 +9,7 @@ type Project = {
     id: number;
     name: string;
     description: string;
+    details: any;
 }
 
 export default function Dashboard() {
@@ -21,7 +22,7 @@ export default function Dashboard() {
 
     const handleOpen = () => setNewOpen(true);
     const handleClose = () => {
-        if (window.confirm("Êtes-vous sûr de vouloir annuler ?")) {
+        if (window.confirm("Êtes-vous sûr de vouloir annuler ?\nVous perdrez toutes les modifications.")) {
             setNewOpen(false);
         }
     };
@@ -35,14 +36,15 @@ export default function Dashboard() {
                 console.log(response);
             }
             const data = await response.json();
-            const formattedData: Project[] = data.map((item: { id: number; name: string; description: string; }) => ({
+            const formattedData: Project[] = data.map((item: { id: number; name: string; description: string; details: any }) => ({
                 id: item.id,
                 name: item.name,
                 description: item.description,
             }));
             setProjects(formattedData);
         } catch (error) {
-            console.error("Erreur :", error);
+            console.error("Erreur lors de la récupération des logements :", error);
+            alert("Erreur lors de la récupération des logements.");
         } finally {
             setLoading(false);
         }
@@ -74,6 +76,9 @@ export default function Dashboard() {
     return (
         <>
             <section id="dashboard">
+                <button onClick={fetchProjects} className="refresh">
+                    Rafraichir
+                </button>
                 <article className="title">
                     <h1>Dashboard Rénovateur</h1>
                 </article>
@@ -93,14 +98,16 @@ export default function Dashboard() {
                                 <p>Aucun logement pour le moment.</p>
                             ) : (
                                 projects.map((project) => (
-                                    <article key={project.id}>
-                                        <h3>{project.name}</h3>
-                                        <p>{project.description}</p>
-                                        <article>
+                                    <section key={project.id}>
+                                        <article className="left">
+                                            <h3>Titre : {project.name}</h3>
+                                            <p>description : {project.description}</p>
+                                        </article>
+                                        <article className="right">
                                             <button onClick={() => handleModification(project.id)}>Modifier</button>
                                             <button onClick={() => confirmDelete(project.id)}>Supprimer</button>
                                         </article>
-                                    </article>
+                                    </section>
                                 ))
                             )}
                         </section>
@@ -132,7 +139,12 @@ export default function Dashboard() {
                         }}
                     >
                         <div className="close-icon"><img alt="close" onClick={handleClose} src={closeIcon}/></div>
-                        <NewProject />
+                        <NewProject
+                            onProjectCreated={() => {
+                                setNewOpen(false);
+                                fetchProjects()
+                            }}
+                        />
                     </Box>
                 </Modal>
             </section>

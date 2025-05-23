@@ -29,9 +29,11 @@ export default async function fetchWithAuth(url: string, options: FetchOptions =
 
             options.headers.Authorization = `Bearer ${access_token}`;
             response = await fetch(`${url}`, options);
-        } else {
-            console.error("Impossible de rafraîchir le token.");
+        } else if (refreshResponse.status === 401) {
+            sessionStorage.removeItem("token");
             throw new Error("Session expirée. Veuillez vous reconnecter.");
+        } else {
+            throw new Error("Erreur lors du rafraîchissement du token.");
         }
     }
 

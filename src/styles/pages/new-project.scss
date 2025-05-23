@@ -50,16 +50,8 @@
         justify-content: flex-start;
         gap: 1rem;
 
-        input {
-          padding: 0.5rem;
-          border-radius: 6px;
-          border: 1px solid black;
-          background-color: white;
-          font-size: 1rem;
-
-          &#description {
-            width: 400px;
-          }
+        #description {
+          width: 400px;
         }
       }
 
@@ -71,15 +63,39 @@
 
         .carousel-container {
           display: flex;
+            flex-direction: column;
           position: relative;
           align-items: center;
           transition: transform 0.3s ease-in-out;
-          width: 300%;
+          width: 100%;
 
           .page {
             width: 100%;
-            h2 {
+            display: flex;
+            max-height: 45vh;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
 
+            &.active {
+              opacity: 1;
+            }
+
+            .explanation {
+              width: 50%;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              gap: 2rem;
+
+              p {
+                max-width: 70%;
+                font-size: 1.2rem;
+              }
+            }
+
+            .MuiCard-root {
+              overflow-y: auto;
             }
           }
         }
