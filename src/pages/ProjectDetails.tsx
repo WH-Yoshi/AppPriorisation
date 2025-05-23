@@ -14,9 +14,9 @@ export default function ProjetDetails() {
     const [open, setOpen] = useState(false);
     const [project, setProject] = useState<Project | null>(null);
 
-    /*const confirmDelete = () => {
+    const confirmDelete = () => {
         setOpen(true);
-    };*/
+    };
 
     const DisplayRenovationWorks = () => {
       const formatMontant = (montant: number) => {
@@ -36,44 +36,44 @@ export default function ProjetDetails() {
       }
 
       const travaux = project.details as Array<{
-        Genre: string;
+        Type: string;
         Description: string;
         Score: number;
         Prime: number;
-        "Coût estimé": number;    // Changé pour correspondre aux données
-        "Prime Éligible": number; // Changé pour correspondre aux données
-        "Coût par surface": boolean; // Changé pour correspondre aux données
-        "Prime par surface": boolean;
+        "Estimated Cost": number;
+        "Estimated Grant": number;
+        "Cost by surface?": boolean;
+        "Grant by surface?": boolean;
       }>;
 
-      const travauxParGenre = travaux.reduce((acc, travail) => {
-        if (!acc[travail.Genre]) {
-          acc[travail.Genre] = [];
+      const worksByType = travaux.reduce((acc, travail) => {
+        if (!acc[travail.Type]) {
+          acc[travail.Type] = [];
         }
-        acc[travail.Genre].push(travail);
+        acc[travail.Type].push(travail);
         return acc;
       }, {} as Record<string, typeof travaux>);
 
       return (
-        <div className="travaux-container">
-          {Object.entries(travauxParGenre).map(([genre, travauxGenre]) => (
-            <div key={genre} className="categorie">
-              <h3>{genre}</h3>
-              <div className="travaux-list">
-                {travauxGenre.map((travail, index) => (
-                  <div key={index} className="travail-card">
+        <section className="travaux-container">
+          {Object.entries(worksByType).map(([type, workType]) => (
+            <section key={type} className="categorie">
+              <h3>{type}</h3>
+              <section className="travaux-list">
+                {workType.map((travail, index) => (
+                  <article key={index} className="travail-card">
                     <h4>{travail.Description}</h4>
-                    <div className="details">
+                    <article className="details">
                       <p>Score de priorité : <span>{formatScore(travail.Score)}</span></p>
-                      <p>Coût moyen estimé : <span>{formatMontant(travail["Coût estimé"])}{travail["Coût par surface"] ? "/m²" : ""}</span></p>
-                      <p>Prime éligible estimée: <span>{formatMontant(travail["Prime Éligible"])}</span></p>
-                    </div>
-                  </div>
+                      <p>Coût moyen estimé : <span>{formatMontant(travail["Estimated Cost"])}{travail["Cost by surface?"] ? "/m²" : ""}</span></p>
+                      <p>Prime éligible estimée: <span>{formatMontant(travail["Estimated Grant"])}</span></p>
+                    </article>
+                  </article>
                 ))}
-              </div>
-            </div>
+              </section>
+            </section>
           ))}
-        </div>
+        </section>
       );
     };
 
@@ -123,17 +123,29 @@ export default function ProjetDetails() {
     }
 
     return (
-        <div>
-            <h1>Détails du projet</h1>
-            <DisplayRenovationWorks />
-
+        <section id="project-details">
+            <article className="title">
+                <h1>Détails du projet</h1>
+            </article>
+            <section className="content">
+                <DisplayRenovationWorks />
+            </section>
+            <section className="actions">
+                <button onClick={() => window.location.href = `/projects/${id}/edit`}>Modifier</button>
+                <button onClick={confirmDelete}>Supprimer</button>
+            </section>
+            <section className="retour">
+                <button onClick={() => window.location.href = "/dashboard"}>Retour</button>
+            </section>
             {open && (
-                <div>
+                <div className="delete-confirmation">
                     <p>Êtes-vous sûr de vouloir supprimer ce projet ?</p>
-                    <button onClick={performDelete}>Confirmer</button>
-                    <button onClick={() => setOpen(false)}>Annuler</button>
+                    <article>
+                        <button onClick={performDelete}>Confirmer</button>
+                        <button onClick={() => setOpen(false)}>Annuler</button>
+                    </article>
                 </div>
             )}
-        </div>
+        </section>
     );
 }
