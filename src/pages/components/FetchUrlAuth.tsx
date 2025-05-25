@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000";
+const API_URL = "https://apppriorisation-api-production.up.railway.app";
 
 type FetchOptions = {
     headers?: Record<string, string>;

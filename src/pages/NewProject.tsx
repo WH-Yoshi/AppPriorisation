@@ -51,7 +51,7 @@ export default function NewProject({ onProjectCreated }: NewProjectProps) {
         console.log(payload);
 
        try {
-           const response = await fetchWithAuth("http://localhost:8000/api/projects/create", {
+           const response = await fetchWithAuth("https://apppriorisation-api-production.up.railway.app/api/projects/create", {
                method: "POST",
                headers: {
                    "Content-Type": "application/json",

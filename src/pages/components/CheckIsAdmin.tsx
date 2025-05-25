@@ -1,7 +1,7 @@
 import fetchWithAuth from "./FetchUrlAuth.tsx";
 
 export async function CheckIsAdmin() {
-    const response = await fetchWithAuth("http://localhost:8000/api/auth/check-admin", {
+    const response = await fetchWithAuth("https://apppriorisation-api-production.up.railway.app/api/auth/check-admin", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

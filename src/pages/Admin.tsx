@@ -39,7 +39,7 @@ export default function Admin() {
             setIsLoading(true);
             setFetchError(null);
             try {
-                const response = await fetchWithAuth("http://localhost:8000/api/admin/weighting");
+                const response = await fetchWithAuth("https://apppriorisation-api-production.up.railway.app/api/admin/weighting");
                 if (response.ok) {
                     const data: WeightingFile[] = await response.json();
                     setFiles(data);
@@ -95,8 +95,8 @@ export default function Admin() {
             const parsedContent = JSON.parse(editedContent[file.filename]);
 
             // Assumons un endpoint PUT pour mettre à jour un fichier spécifique
-            // ex: PUT http://localhost:8000/api/admin/weighting/desires.json
-            const response = await fetchWithAuth(`http://localhost:8000/api/admin/weighting/${file.filename}`, {
+            // ex: PUT https://apppriorisation-api-production.up.railway.app/api/admin/weighting/desires.json
+            const response = await fetchWithAuth(`https://apppriorisation-api-production.up.railway.app/api/admin/weighting/${file.filename}`, {
                 method: 'PUT', // Ou 'PATCH' selon votre API
                 headers: {
                     'Content-Type': 'application/json',

@@ -29,7 +29,7 @@ export default function Dashboard() {
 
     const fetchProjects = async () => {
         try {
-            const response = await fetchWithAuth("http://localhost:8000/api/projects/retrieve", {
+            const response = await fetchWithAuth("https://apppriorisation-api-production.up.railway.app/api/projects/retrieve", {
                 method: "GET",
             });
             if (!response.ok) {
@@ -65,7 +65,7 @@ export default function Dashboard() {
 
     const performDelete = async () => {
         try {
-            await fetchWithAuth(`http://localhost:8000/api/projects/${selectedId}`, { method: "DELETE" });
+            await fetchWithAuth(`https://apppriorisation-api-production.up.railway.app/api/projects/${selectedId}`, { method: "DELETE" });
             alert("Projet supprimé avec succès !");
             setNewOpen(false);
         } catch (error) {
