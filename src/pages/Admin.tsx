@@ -1,33 +1,51 @@
 import { useEffect, useState } from "react";
 import fetchWithAuth from "./components/FetchUrlAuth";
 
+// TypeScript interfaces
+interface WeightingFile {
+    filename: string;
+    content: object;
+}
+
+interface EditedContent {
+    [filename: string]: string;
+}
+
+interface SavingStatus {
+    [filename: string]: "saving" | "saved" | "error" | null;
+}
+
+interface ParseErrors {
+    [filename: string]: string | null;
+}
+
 export default function Admin() {
     // État pour stocker les fichiers de pondération originaux
-    const [files, setFiles] = useState([]);
+    const [files, setFiles] = useState<WeightingFile[]>([]);
     // État pour stocker le contenu éditable (format string JSON) de chaque fichier
-    const [editedContent, setEditedContent] = useState({});
+    const [editedContent, setEditedContent] = useState<EditedContent>({});
     // État pour gérer le statut de sauvegarde de chaque fichier (ex: "saving", "saved", "error")
-    const [savingStatus, setSavingStatus] = useState({});
+    const [savingStatus, setSavingStatus] = useState<SavingStatus>({});
     // État pour stocker les erreurs de parsing JSON lors de l'édition
-    const [parseErrors, setParseErrors] = useState({});
+    const [parseErrors, setParseErrors] = useState<ParseErrors>({});
     // État de chargement initial des fichiers
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     // État d'erreur lors du chargement initial des fichiers
-    const [fetchError, setFetchError] = useState(null);
+    const [fetchError, setFetchError] = useState<string | null>(null);
 
     // Effet pour récupérer les fichiers lors du montage du composant
     useEffect(() => {
-        const fetchFiles = async () => {
+        const fetchFiles = async (): Promise<void> => {
             setIsLoading(true);
             setFetchError(null);
             try {
                 const response = await fetchWithAuth("http://localhost:8000/api/admin/weighting");
                 if (response.ok) {
-                    const data = await response.json();
+                    const data: WeightingFile[] = await response.json();
                     setFiles(data);
 
                     // Initialise editedContent avec le contenu stringifié de chaque fichier
-                    const initialEditedContent = {};
+                    const initialEditedContent: EditedContent = {};
                     data.forEach(file => {
                         // Assurez-vous que file.content est un objet avant de stringifier
                         initialEditedContent[file.filename] = JSON.stringify(file.content, null, 2);
@@ -40,7 +58,8 @@ export default function Admin() {
                 }
             } catch (error) {
                 console.error("Erreur réseau ou autre:", error);
-                setFetchError(`Erreur de connexion : ${error.message}`);
+                const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
+                setFetchError(`Erreur de connexion : ${errorMessage}`);
             } finally {
                 setIsLoading(false);
             }
@@ -50,7 +69,7 @@ export default function Admin() {
     }, []); // Le tableau vide assure que l'effet ne s'exécute qu'une fois au montage
 
     // Gère les changements dans le textarea pour un fichier donné
-    const handleContentChange = (filename, value) => {
+    const handleContentChange = (filename: string, value: string): void => {
         setEditedContent(prev => ({
             ...prev,
             [filename]: value
@@ -61,12 +80,13 @@ export default function Admin() {
             JSON.parse(value);
             setParseErrors(prev => ({ ...prev, [filename]: null })); // Supprime l'erreur si le JSON est valide
         } catch (e) {
-            setParseErrors(prev => ({ ...prev, [filename]: "JSON invalide : " + e.message }));
+            const errorMessage = e instanceof Error ? e.message : 'Erreur de parsing JSON';
+            setParseErrors(prev => ({ ...prev, [filename]: "JSON invalide : " + errorMessage }));
         }
     };
 
     // Gère la sauvegarde des modifications pour un fichier donné
-    const handleSaveChanges = async (file) => {
+    const handleSaveChanges = async (file: WeightingFile): Promise<void> => {
         setSavingStatus(prev => ({ ...prev, [file.filename]: "saving" }));
         setParseErrors(prev => ({ ...prev, [file.filename]: null })); // Efface les erreurs précédentes
 
@@ -100,10 +120,11 @@ export default function Admin() {
             }
         } catch (error) {
             console.error("Erreur lors de la sauvegarde :", error);
+            const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue lors de la sauvegarde.';
             setSavingStatus(prev => ({ ...prev, [file.filename]: "error" }));
             setParseErrors(prev => ({
                 ...prev,
-                [file.filename]: error.message || "Erreur inconnue lors de la sauvegarde."
+                [file.filename]: errorMessage
             }));
             setTimeout(() => setSavingStatus(prev => ({ ...prev, [file.filename]: null })), 5000); // Efface l'erreur après 5s
         }
@@ -127,9 +148,8 @@ export default function Admin() {
                             <textarea
                                 value={editedContent[file.filename] || ''}
                                 onChange={(e) => handleContentChange(file.filename, e.target.value)}
-                                rows="15" // Nombre de lignes par défaut
-                            >
-                            </textarea>
+                                rows={15} // Nombre de lignes par défaut
+                            />
 
                             {/* Affichage des erreurs de parsing JSON */}
                             {parseErrors[file.filename] && (
@@ -140,7 +160,7 @@ export default function Admin() {
                                 <button
                                     onClick={() => handleSaveChanges(file)}
                                     // Désactive le bouton si en cours de sauvegarde ou si le JSON est invalide
-                                    disabled={savingStatus[file.filename] === "saving" || parseErrors[file.filename]}
+                                    disabled={savingStatus[file.filename] === "saving" || !!parseErrors[file.filename]}
                                 >
                                     {savingStatus[file.filename] === "saving" ? "Sauvegarde..." : "Sauvegarder les modifications"}
                                 </button>

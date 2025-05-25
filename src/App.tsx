@@ -25,7 +25,9 @@ function App() {
                 { path: "login", element: <NonConnectedPrivateRoute><Login /></NonConnectedPrivateRoute> },
                 { path: "register", element: <NonConnectedPrivateRoute><Register /></NonConnectedPrivateRoute> },
                 { path: "dashboard", element: <ConnectedPrivateRoute><PublicOnlyRoute><Dashboard /></PublicOnlyRoute></ConnectedPrivateRoute>},
-                { path: "new-project", element: <ConnectedPrivateRoute><PublicOnlyRoute><NewProject /></PublicOnlyRoute></ConnectedPrivateRoute> },
+                { path: "new-project", element: <ConnectedPrivateRoute><PublicOnlyRoute><NewProject onProjectCreated={function(): void {
+                    throw new Error("Function not implemented.");
+                } } /></PublicOnlyRoute></ConnectedPrivateRoute> },
                 { path: "/project/:id", element: <ConnectedPrivateRoute><ProjectDetails /></ConnectedPrivateRoute> },
                 { path: "/admin", element: <AdminRoute><Admin /></AdminRoute> },
 
