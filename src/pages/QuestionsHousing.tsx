@@ -1,13 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import {
-    Card,
-    CardContent,
-    MenuItem,
-    Select,
-    FormControl,
-    InputLabel,
-    TextField
-} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {Card, CardContent, FormControl, InputLabel, MenuItem, Select, TextField} from '@mui/material';
 
 type QuestionsLogementProps = {
     onChange: (data: FormData1) => void;

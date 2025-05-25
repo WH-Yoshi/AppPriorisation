@@ -10,6 +10,9 @@ import ProjectDetails from "./pages/ProjectDetails.tsx";
 import NonConnectedPrivateRoute from "./pages/components/NotConnectedProtectedRoute.tsx";
 import ConnectedPrivateRoute from "./pages/components/ConnectedProtectedRoute.tsx";
 import NewProject from "./pages/NewProject.tsx";
+import AdminRoute from "./pages/components/AdminRoute.tsx"
+import Admin from "./pages/Admin.tsx";
+import PublicOnlyRoute from "./pages/components/NotAdminRoute.tsx";
 
 function App() {
     const router = createBrowserRouter([
@@ -21,9 +24,10 @@ function App() {
                 { path: "home", element: <Home /> },
                 { path: "login", element: <NonConnectedPrivateRoute><Login /></NonConnectedPrivateRoute> },
                 { path: "register", element: <NonConnectedPrivateRoute><Register /></NonConnectedPrivateRoute> },
-                { path: "dashboard", element: <ConnectedPrivateRoute><Dashboard /></ConnectedPrivateRoute> },
-                { path: "new-project", element: <ConnectedPrivateRoute><NewProject /></ConnectedPrivateRoute> },
+                { path: "dashboard", element: <ConnectedPrivateRoute><PublicOnlyRoute><Dashboard /></PublicOnlyRoute></ConnectedPrivateRoute>},
+                { path: "new-project", element: <ConnectedPrivateRoute><PublicOnlyRoute><NewProject /></PublicOnlyRoute></ConnectedPrivateRoute> },
                 { path: "/project/:id", element: <ConnectedPrivateRoute><ProjectDetails /></ConnectedPrivateRoute> },
+                { path: "/admin", element: <AdminRoute><Admin /></AdminRoute> },
 
                 { path: "test", element: <Test /> },
             ],

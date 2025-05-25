@@ -1,12 +1,25 @@
 import {useLocation, useNavigate} from "react-router";
+import {useEffect, useState} from "react";
+import {CheckIsAdmin} from "../components/CheckIsAdmin.tsx";
 
 function Header() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const hiddenPaths = ["/login", "/register", "/creation-profil", "/dashboard"];
+    const [isAdmin, setIsAdmin] = useState(false);
+    const token_exist = sessionStorage.getItem("token");
 
-    const token_exist = localStorage.getItem("token");
+    useEffect(() => {
+        const checkAdmin = async () => {
+            if (token_exist) {
+                const result = await CheckIsAdmin();
+                setIsAdmin(result);
+            }
+        };
+        checkAdmin();
+    }, [token_exist]);
+
+    const hiddenPaths = ["/login", "/register", "/creation-profil", "/dashboard", "/admin"];
 
     return (
         <section id="header">
@@ -19,12 +32,19 @@ function Header() {
                         <button id="login" type="button" onClick={() => navigate("/login")}>Login</button>
                     )}
                     {token_exist && (
-                        <button id="logout" type="button" onClick={() => {}}>Logout</button>
+                        <>
+                            <button id="logout" type="button" onClick={() => {}}>Logout</button>
+                            {isAdmin && (
+                                <button id="admin-dashboard-button" type="button" onClick={() => navigate("/admin")}>
+                                    Admin Dashboard
+                                </button>
+                            )}
+                        </>
                     )}
                 </article>
             </section>
         </section>
-    )
+    );
 }
 
 export default Header;

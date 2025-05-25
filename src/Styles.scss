@@ -9,6 +9,7 @@
   @include dashboard-desktop;
   @include new-project-desktop;
   @include project-details;
+  @include admin;
 }
 
 @media screen and (min-width: 1024px) and (max-width: 1600px) {
