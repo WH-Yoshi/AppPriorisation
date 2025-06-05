@@ -19,6 +19,11 @@ function Header() {
         checkAdmin();
     }, [token_exist]);
 
+    function logout() {
+        localStorage.removeItem("token");
+        navigate("/home");
+    }
+
     const hiddenPaths = ["/login", "/register", "/creation-profil", "/dashboard", "/admin"];
 
     return (
@@ -33,7 +38,7 @@ function Header() {
                     )}
                     {token_exist && (
                         <>
-                            <button id="logout" type="button" onClick={() => {}}>Logout</button>
+                            <button id="logout" type="button" onClick={logout}>Logout</button>
                             {isAdmin && (
                                 <button id="admin-dashboard-button" type="button" onClick={() => navigate("/admin")}>
                                     Admin Dashboard

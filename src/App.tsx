@@ -4,7 +4,6 @@ import "./Styles.scss";
 import Home from "./pages/Home.tsx";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
-import Test from "./pages/Test.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import ProjectDetails from "./pages/ProjectDetails.tsx";
 import NonConnectedPrivateRoute from "./pages/components/NotConnectedProtectedRoute.tsx";
@@ -30,8 +29,6 @@ function App() {
                 } } /></PublicOnlyRoute></ConnectedPrivateRoute> },
                 { path: "/project/:id", element: <ConnectedPrivateRoute><ProjectDetails /></ConnectedPrivateRoute> },
                 { path: "/admin", element: <AdminRoute><Admin /></AdminRoute> },
-
-                { path: "test", element: <Test /> },
             ],
         },
     ]);
